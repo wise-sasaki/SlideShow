@@ -1,0 +1,294 @@
+@charset "utf-8";
+body {
+    font-family: Arial,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;
+    /* body部の黒っぽい色にします。 */
+    background-color: #252525;
+    /* コンテキストメニューが表示領域からはみ出しても表示しません。 */
+    overflow: hidden;
+    position: relative;
+    color: #fff;
+}
+#background-image {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+}
+#background-image::before {
+    background: inherit;
+    content: '';
+    filter: blur(5px);
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    bottom: -5px;
+    left: -5px;
+} 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+#file-area {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    color: white;
+    z-index: 1;
+}
+.file-area-item {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+}
+progress#meter {
+    max-width: 300px;
+    margin-left: 10px;
+}
+.setting-area {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    height: 30px;
+    line-height: 30px;
+    z-index: 2 ;
+    text-align: right;
+}
+.setting-area > button {
+    width: 45px;
+    height: 30px;
+    text-align: center;
+}
+#display-area {
+    /* 表示管理エリアは相対位置に表示します。 */
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    width: 100%;
+}
+.howtouse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 300px;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+#photo-area {
+    /* 画像表示エリアのスタイルです。 */
+    /* 画像が表示領域からはみ出したら表示しません。 */
+    overflow: hidden;
+}
+.photo {
+    /* 画像本体のスタイルです。 */
+    /* 写真っぽくみえるように気分で白枠を付けます。 */
+    border: solid 5px white;
+    /* 調整が面倒になるので要素のサイズは枠線を含むようにします。*/
+    box-sizing: border-box;
+    background-image: linear-gradient(45deg, gray 25%, transparent 25%, transparent 75%, gray 75%),
+    linear-gradient(45deg, gray 25%, transparent 25%, transparent 75%, gray 75%); /* 市松模様になるようグラデーションで単色を入れる */
+    background-position: 0 0, 10px 10px;
+    background-size: 20px 20px;
+    background-color: lightgray;
+}
+.hidden-area {
+    /* 画面左右に配置する画像切り替えボタンの表示エリアです。*/
+    /* 通常は左右の表示切り替えボタンエリアが見えないように隠します。 */
+    opacity: 0;
+    /* マウス操作ができるように他要素よりも手前に表示します。 */
+    z-index: 3;
+    /* ホワッと現れるように設定します。 */
+    transition: all 1s;
+}
+.hidden-area:hover {
+    /* 領域にマウスオーバーした時に表示されます。 */
+    opacity: 1;
+}
+#left-side {
+    /* 画面左側の画像切り替えボタン表示エリアです。 */
+    /* 絶対位置に表示します。 */
+    position: absolute;
+    /* 親要素からの位置を指定します。absoluteの時だけ設定できます。 */
+    top: 0px;
+    left: 0px;
+    /* エリアのサイズを指定します。 */
+    width: 100px;
+    height: 100%;
+}
+#right-side {
+    /* 画面右側の画像切り替えボタン表示エリアです。 */
+    /* 絶対位置に表示します。 */
+    position: absolute;
+    /* 親要素からの位置を指定します。absoluteの時だけ設定できます。 */
+    top: 0px;
+    right: 0px;
+    /* エリアのサイズを指定します。 */
+    width: 100px;
+    height: 100%;
+}
+.change-button {
+    /* 画像切り替えボタンです。 */
+    /* 絶対位置に表示します。 */
+    position: absolute;
+    /* 背景色を白色にします。 */
+    background-color: white;
+    color: #000;
+    /* ボタンのサイズを指定します。 */
+    width: 50px;
+    height: 50px;
+    /* ボタンの角丸具合を指定します。要素の半分丸なので円になります。 */
+    border-radius: 50%;
+    /* 通常状態を半透明にします。 */
+    opacity: .3;
+    /* テキストを太字にします。 */
+    font-weight: bold;
+    /* テキストを横位置の中央揃えにします。 */
+    text-align: center;
+    /* テキストを縦位置の中央にしたいので文字の高さを要素の高さと同じにします。 */
+    line-height: 50px;
+    /* 親要素の中央位置ぐらいに配置します。 */
+    top: 50%;
+}
+.change-button:hover {
+    /* ボタンにマウスオーバーした時にハッキリ表示されるようにします。 */
+    opacity: 1;
+}
+.button-left {
+    /* ちょっとした位置調整 */
+    left: 10px;
+}
+.button-right {
+    /* ちょっとした位置調整 */
+    right: 10px;
+}
+#left-button::after {
+    /* ボタンのテキスト */
+    content: "＜"
+}
+#right-button::after {
+    /* ボタンのテキスト */
+    content: "＞"
+}
+.menu {
+    display: none;
+    position: relative;
+    background-color: white;
+    padding: 10px 10px 10px 10px;
+    font-size: 0.8rem;
+    text-align: left;
+    color: #000;
+    border-radius: 5px;
+    width: 100%;
+}
+.menu .menu-item:hover {
+    background-color: lightblue;
+}
+.menu-subtitle {
+    width: 15%;
+}
+.menu-subtitle, .menu-item {
+    display: inline-block;
+}
+
+.locked {
+    display: inline-block;
+    width: 100px;
+    height: 20px;
+    border-radius: 5px;
+    border: solid 3px white;
+    color: orangered;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bold;
+    margin: 0px 10px;
+}
+
+.animation-fadein {
+    /* fade-inという名前の@keyframesを使います。 */
+    animation-name: fade-in;
+    /* アニメーション時間は5秒間です。 */
+    animation-duration: 5s;
+    /* ループさせないです。ループさせるならinfiniteだったかな。 */
+    animation-iteration-count: initial;
+}
+@keyframes fade-in {
+    0% {
+        /* 最初は透過度MAXです。 */
+        opacity:0;
+    }
+    20% {
+        /* アニメーション時間の20%で透過度0にします。0-20%の間に徐々に表示されます。 */
+        opacity:1;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+.animation-scale {
+    /* scale-x0_5という名前の@keyframesを使います。 */
+    animation-name: scale-x0_5;
+    /* アニメーション時間は5秒間です。 */
+    animation-duration: 5s;
+    /* ループさせないです。ループさせるならinfiniteだったかな。 */
+    animation-iteration-count: initial;
+}
+@keyframes scale-x0_5 {
+    0% {
+        /* 最初は等倍です。 */
+        transform: scale(1);
+    }
+    100% {
+        /* 半分のサイズに縮小します。 */
+        transform: scale(.5);
+    }
+}
+
+.animation-moveUp {
+    /* move-upという名前の@keyframesを使います。 */
+    animation-name: move-up;
+    /* アニメーション時間は5秒間です。 */
+    animation-duration: 5s;
+    /* ループさせないです。ループさせるならinfiniteだったかな。 */
+    animation-iteration-count: initial;
+    /* アニメーションに緩急を付けてみる */
+    /* animation-timing-function: cubic-bezier(.1,.66,.87,.4); */
+}
+@keyframes move-up {
+    100% {
+        bottom: 0px;
+    }
+}
+
+.animation-moveDown {
+    /* move-downという名前の@keyframesを使います。 */
+    animation-name: move-down;
+    /* アニメーション時間は5秒間です。 */
+    animation-duration: 5s;
+    /* ループさせないです。ループさせるならinfiniteだったかな。 */
+    animation-iteration-count: initial;
+    /* アニメーションに緩急を付けてみる */
+    /* animation-timing-function: cubic-bezier(.1,.66,.87,.4); */
+}
+@keyframes move-down {
+    100% {
+        /* 下方向にスクロールする場合はスクロール仕切らない方がイイ感じ */
+        top: -10%;
+    }
+}
+@media screen and (max-width: 650px) {
+    #display-area {
+        top: 90px;
+    }
+}
+@media screen and (max-width: 400px) {
+    #display-area {
+        top: 120px;
+    }
+}

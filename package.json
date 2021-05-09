@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack -w",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.5",
+    "jest": "^26.6.3",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "private": true
+}

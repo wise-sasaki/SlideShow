@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フォトビュアー</title>
+    <!-- jQueryです。 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <!-- アプリケーションのCSSです。 -->
+    <link type="text/css" rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body id="contents">
+    <div id="background-image">
+        <!-- ファイル管理エリアです。 -->
+        <div id="file-area">
+            <div class="file-area-item">
+                <!-- ファイルダイアログです。webkitdirectoryでディレクトリ単位になります。 -->
+                <input type="file" title="読み込んだファイルは、サーバーにアップロードされません。" id="file" webkitdirectory />
+            </div>
+            <div class="file-area-item">
+                <!-- 再生ボタンです。 -->
+                <button id="play" title="再生ボタン"><span class='ui-icon ui-icon-play'></span></button>
+                <!-- プログレスバーです。 -->
+                <progress id="meter" max="100" value="0"></progress>
+            </div>
+            <div class="file-area-item">
+                <label id="meter-text" for="meter"></label>
+            </div>
+            <hr class="line">
+        </div>
+        <div class="setting-area">
+            <!-- 設定ボタンです。 -->
+            <button id="setting" title="設定ボタン"><span class='ui-icon ui-icon-gear'></span></button>
+        </div>
+        <!-- 表示管理領域です。右クリックのメニュー表示を無効化しています。 -->
+        <div id="display-area" oncontextmenu="return false;">
+            <div class="howtouse">
+                使い方<br/>
+                読み込んだファイルは、サーバーにアップロードされません。<br/>
+                右上の設定ボタンから表示方法、表示時間の変更ができます。<br/>
+                スマートフォンからもご利用頂けます。<br/>
+                <br/>
+                How to use<br/>
+                The loaded file is not uploaded to the server.<br/>
+                You can change the display method and display time from the setting button in the upper right.<br/>
+                It can also be used from a smartphone.<br/>
+
+            </div>
+            <!-- 画像切り替えボタンを置く左側エリアです。 -->
+            <div id="left-side" class="hidden-area">
+                <!-- 画像切り替え左ボタンです。マルチクラスで装飾しています。 -->
+                <div id="left-button" class="change-button button-left"></div>
+            </div>
+            <!-- 画像切り替えボタンを置く右側エリアです。 -->
+            <div id="right-side" class="hidden-area">
+                <!-- 画像切り替え右ボタンです。マルチクラスで装飾しています。 -->
+                <div id="right-button" class="change-button button-right"></div>
+            </div>
+            <!-- 画像表示エリアです。 -->
+            <div id="photo-area"></div>
+        </div>
+    </div>
+    <!-- アプリケーションのjsです。 -->
+    <script type="text/javascript" src="../js/SlideShow.js"></script>
+</body>
+
+</html>
