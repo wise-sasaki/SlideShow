@@ -2,4 +2,4 @@
 プロトタイプ版
 
 # DEMO
-https://baigie.me/officialblog/2021/02/25/css-tips-1/
+https://master.d2vimmknebri5f.amplifyapp.com/resource/html/index.html
