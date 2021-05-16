@@ -3,9 +3,6 @@
  * 許容するMINEタイプを設定します。
  */
 export class MimeType {
-    /*
-     * statc変数を使ってみた。このアプリケーションでは特に意味なし。
-     */
     /** JPEG */
     public static TYPE_JPG = "image/jpeg";
     /** PNG */
@@ -17,7 +14,6 @@ export class MimeType {
 
     /**
      * MINEタイプチェック処理です。
-     * staticメソッド使ってみた。
      * @param type MINEタイプ
      * @return boolean 可:true,不可:false
      */

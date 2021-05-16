@@ -1,3 +1,4 @@
+import $ from "jquery";
 import { MimeType } from "./MimeType";
 import { PhotoData } from "./PhotoData";
 import { SlideShowManager } from "./SlideShowManager";
@@ -5,7 +6,7 @@ import { SlideShowManager } from "./SlideShowManager";
 /**
  * ファイル読み込み機能クラスです。
  * 画像ファイルだけを取り出して、後続処理で使いやすいように整理しています。
- * 非同期処理なのでこのクラスからスライドショー管理クラスを呼び出しています。fuck
+ * 非同期処理なのでこのクラスからスライドショー管理クラスを呼び出しています。
  */
 export class SlideShowFileReader {
 
@@ -65,7 +66,6 @@ export class SlideShowFileReader {
         // ファイルダイアログから取得できた分だけ処理をループします。
         // HTMLElementのeventからev.target.filesでファイルを読み取れます。
         for (let i = 0; i < ev.target.files.length; i++) {
-            // constは再代入しない場合に、letは再代入しない場合に使います。
             const file = ev.target.files[i];
             if (!MimeType.isAvailable(file.type)) {
                 // 欲しいのは画像なのでMimeTypeで指定しているMINEタイプのみ処理します。
@@ -81,7 +81,6 @@ export class SlideShowFileReader {
             // FileReaderの読み込みを待って処理します。
             fileReader.onload = async () => {
                 const url = fileReader.result;
-                // const result = await analyze(url);
                 // 画像データを保持するオブジェクトを作成します。
                 const photo = new PhotoData(file, url);
                 // 画像データの配列に追加します。
@@ -111,18 +110,10 @@ export class SlideShowFileReader {
      * @param b 比較するデータ２
      */
     private compareName(a: PhotoData, b: PhotoData): number {
-        if (a.getFileName() > b.getFileName()) {
+        if (a.fileName > b.fileName) {
             return 1;
         } else {
             return -1;
         }
-    }
-
-    /**
-     * 画像データ取得処理です。
-     * 使っていません。
-     */
-    public getPhotData(): Array<PhotoData> {
-        return this.photoArray;
     }
 }

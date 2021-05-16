@@ -1,5 +1,6 @@
-import { SlideShowFileReader } from "./SlideShowFileReader"
-import { SlideShowPlayer } from "./SlideShowPlayer"
+import { SlideShowDomCreate } from "./SlideShowDomCreate";
+import { SlideShowFileReader } from "./SlideShowFileReader";
+import { SlideShowPlayButton } from "./SlideShowPlayButton";
 
 /**
  * Windows風スライドショーのメインクラスです。
@@ -13,6 +14,8 @@ class Main {
      * 各機能に対するクラスの呼び出しを行ないます。
      */
     public main() {
+        // DOMの作成
+        new SlideShowDomCreate();
         // ファイル操作エリアを取得
         const $fileArea: JQuery = $('#file-area');
         // 画像表示エリアを取得
@@ -30,7 +33,7 @@ class Main {
         // ファイル読み込み機能の呼び出し
         new SlideShowFileReader($('#file')[0], $photoArea[0]);
         // 再生ボタン機能の呼び出し
-        new SlideShowPlayer($('#play')[0]);
+        new SlideShowPlayButton($('#play')[0]);
     }
 
     /**
@@ -54,4 +57,6 @@ class Main {
 }
 
 // メイン処理を起動
-new Main().main();
+$(window).on('load', () => {
+    new Main().main();
+});

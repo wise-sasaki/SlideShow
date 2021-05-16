@@ -1,9 +1,10 @@
+import $ from "jquery";
 import { SlideShowManager } from "./SlideShowManager";
 import { PhotoMode } from "./PhotoMode";
 /**
  * トグルメニュー作成クラスです。
  */
-export class SlidshowToggleMenu {
+export class SlideShowToggleMenu {
     /** スライドショー管理クラス */
     private slideShowManager: SlideShowManager;
 
@@ -11,9 +12,9 @@ export class SlidshowToggleMenu {
      * コンストラクターです。
      * @param element 画像表示エリアの要素
      */
-    constructor(slideShowManager: SlideShowManager) {
+    constructor(manager: SlideShowManager) {
         // メンバ変数の初期化をします。
-        this.slideShowManager = slideShowManager;
+        this.slideShowManager = manager;
         // トグルメニューを作成します。
         this.menuInit();
         // イベント登録します。
@@ -24,10 +25,12 @@ export class SlidshowToggleMenu {
      * トグルメニューの作成
      */
     private menuInit(): void {
+        // 一度トグルメニューを削除する。
+        $('#toggle-menu').remove();
         // トグルメニュー外枠作成
         const menuDiv = $('<div></div>');
         menuDiv.attr({
-            id: "contextmenu",
+            id: "toggle-menu",
             class: "menu"
         });
         // トグルメニュータイトル
@@ -187,7 +190,7 @@ export class SlidshowToggleMenu {
         randomOrderDiv.append(randomOrderLabel);
         orderDiv.append(randomOrderDiv);
         menuDiv.append(orderDiv);
-        // 画像表示エリアの親要素に追加
+        // 設定エリアの親要素に追加
         $('.setting-area').append(menuDiv);
     }
 
@@ -195,33 +198,34 @@ export class SlidshowToggleMenu {
      * トグルメニューの登録
      */
     private addTogglemenuEventListener(): void {
+        // トグルメニューの開閉を設定
         $('#setting').on('click', () => {
-            $('#contextmenu').slideToggle();
-            $('#contextmenu').toggleClass('active');
-            // 「通常」が押されたら表示モードを通常に変更
-            this.modeAddEvent($("#normal"), PhotoMode.NORMAL);
-
-            // 「ズームアウト」が押されたら表示モードを効果に変更
-            this.modeAddEvent($("#zoomout"), PhotoMode.ZOOMOUT);
-
-            // 「スライドイン」が押されたら表示モードを効果に変更
-            this.modeAddEvent($("#slidein"), PhotoMode.SLIDEIN);
-
-            // 「３秒」が押されたら表示時間を３秒に変更
-            this.typeAddEvent($("#sec3"), 3);
-
-            // 「５秒」が押されたら表示時間を５秒に変更
-            this.typeAddEvent($("#sec5"), 5);
-
-            // 「１０秒」が押されたら表示時間を１０秒に変更
-            this.typeAddEvent($("#sec10"), 10);
-
-            // 「名前順」が押されたら表示順を通常順に変更
-            this.orderAddEvent($("#default"), true);
-
-            // 「ランダム順」が押されたら表示順をランダム順に変更
-            this.orderAddEvent($("#random"), false);
+            $('#toggle-menu').slideToggle();
+            $('#toggle-menu').toggleClass('active');
         });
+        // 「通常」が押されたら表示モードを通常に変更
+        this.modeAddEvent($("#normal"), PhotoMode.NORMAL);
+
+        // 「ズームアウト」が押されたら表示モードを効果に変更
+        this.modeAddEvent($("#zoomout"), PhotoMode.ZOOMOUT);
+
+        // 「スライドイン」が押されたら表示モードを効果に変更
+        this.modeAddEvent($("#slidein"), PhotoMode.SLIDEIN);
+
+        // 「３秒」が押されたら表示時間を３秒に変更
+        this.timeAddEvent($("#sec3"), 3);
+
+        // 「５秒」が押されたら表示時間を５秒に変更
+        this.timeAddEvent($("#sec5"), 5);
+
+        // 「１０秒」が押されたら表示時間を１０秒に変更
+        this.timeAddEvent($("#sec10"), 10);
+
+        // 「名前順」が押されたら表示順を通常順に変更
+        this.orderAddEvent($("#default"), true);
+
+        // 「ランダム順」が押されたら表示順をランダム順に変更
+        this.orderAddEvent($("#random"), false);
     }
 
     /**
@@ -255,12 +259,12 @@ export class SlidshowToggleMenu {
      * @param $elem 対象の要素
      * @param sec 秒数
      */
-    private typeAddEvent($elem: JQuery, sec: number): void {
+    private timeAddEvent($elem: JQuery, sec: number): void {
         // 自分自身の要素にchangeイベントを登録します。
         $elem.on('change', () => {
-            this.slideShowManager.type = sec;
+            this.slideShowManager.time = sec;
             this.slideShowManager.resetFlg = true;
-            this.slideShowManager.changePhoto(this.slideShowManager.type);
+            this.slideShowManager.changePhoto(this.slideShowManager.time);
         });
     }
 
@@ -272,7 +276,7 @@ export class SlidshowToggleMenu {
     private orderAddEvent($elem: JQuery, flg: boolean): void {
         // 自分自身の要素にchangeイベントを登録します。
         $elem.on('change', () => {
-            this.slideShowManager.isDefaultOrder = flg;
+            this.slideShowManager.change.isDefaultOrder = flg;
         });
     }
 }

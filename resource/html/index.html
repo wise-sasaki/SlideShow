@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8" />
+    <!-- レスポンシブ対応用のビューポートです。 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>フォトビュアー</title>
+    <title>スライドショー</title>
     <!-- jQueryです。 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -13,44 +14,51 @@
         integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <!-- アプリケーションのCSSです。 -->
     <link type="text/css" rel="stylesheet" href="../css/style.css" />
+    <!-- アプリケーションのjsです。 -->
+    <script type="text/javascript" src="../js/SlideShow.js"></script>
 </head>
 
-<body id="contents">
-    <div id="background-image">
+<body>
+    <!-- スライドショー表示エリアです。背景画像を表示します。 -->
+    <div id="slideshow-wrap" class="background-image">
         <!-- ファイル管理エリアです。 -->
         <div id="file-area">
             <div class="file-area-item">
                 <!-- ファイルダイアログです。webkitdirectoryでディレクトリ単位になります。 -->
-                <input type="file" title="読み込んだファイルは、サーバーにアップロードされません。" id="file" webkitdirectory multiple/>
+                <input type="file" title="読み込んだファイルは、サーバーにアップロードされません。" id="file" webkitdirectory multiple />
             </div>
             <div class="file-area-item">
                 <!-- 再生ボタンです。 -->
-                <button id="play" title="再生ボタン"><span class='ui-icon ui-icon-play'></span></button>
+                <button id="play" title="再生ボタン"><span class="ui-icon ui-icon-play"></span></button>
                 <!-- プログレスバーです。 -->
                 <progress id="meter" max="100" value="0"></progress>
             </div>
             <div class="file-area-item">
+                <!-- プログレスバー用のメッセージです。 -->
                 <label id="meter-text" for="meter"></label>
             </div>
+            <!-- 間仕切り用の線です。 -->
             <hr class="line">
         </div>
+        <!-- 設定ボタンエリアです。 -->
         <div class="setting-area">
             <!-- 設定ボタンです。 -->
-            <button id="setting" title="設定ボタン"><span class='ui-icon ui-icon-gear'></span></button>
+            <button id="setting" title="設定ボタン"><span class="ui-icon ui-icon-gear"></span></button>
         </div>
-        <!-- 表示管理領域です。右クリックのメニュー表示を無効化しています。 -->
-        <div id="display-area" oncontextmenu="return false;">
-            <div class="howtouse">
-                使い方<br/>
-                読み込んだファイルは、サーバーにアップロードされません。<br/>
-                右上の設定ボタンから表示方法、表示時間の変更ができます。<br/>
-                スマートフォンからもご利用頂けます。<br/>
-                <br/>
-                How to use<br/>
-                The loaded file is not uploaded to the server.<br/>
-                You can change the display method and display time from the setting button in the upper right.<br/>
-                It can also be used from a smartphone.<br/>
-
+        <!-- 表示管理エリアです。 -->
+        <div id="display-area">
+            <div class="explanation">
+                &lt;説明&gt;<br />
+                画像ファイルをスライドショーの様に順番に表示するアプリケーションです。<br />
+                右上の設定ボタンから表示方法、表示時間の変更ができます。<br />
+                読み込んだファイルは、サーバーにアップロードされません。<br />
+                スマートフォンからもご利用頂けます。<br />
+                <br />
+                &lt;explanation&gt;<br />
+                It is an application that displays image files in order like a slide show.<br />
+                You can change the display method and display time from the setting button in the upper right.<br />
+                The loaded file is not uploaded to the server.<br />
+                It can also be used from a smartphone.<br />
             </div>
             <!-- 画像切り替えボタンを置く左側エリアです。 -->
             <div id="left-side" class="hidden-area">
@@ -66,8 +74,6 @@
             <div id="photo-area"></div>
         </div>
     </div>
-    <!-- アプリケーションのjsです。 -->
-    <script type="text/javascript" src="../js/SlideShow.js"></script>
 </body>
 
 </html>
