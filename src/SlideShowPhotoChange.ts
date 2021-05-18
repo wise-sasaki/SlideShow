@@ -178,12 +178,23 @@ export class SlideShowPhotoChange {
         } else {
             // 横長画像の場合
             if (areaHeight && areaWidth) {
-                // 画像のサイズを取得します。
-                const size = this.calculation(photo, areaHeight * 2, 0);
-                // 画像の高さを設定します。
-                element.height(`${size['photoY']}px`);
-                // 画像をアニメションするために画像のスタイルを個別に設定します。
-                this.animationScale(element, (areaWidth / 2) - (size['photoX'] / 2), (areaHeight / 2) - (size['photoY'] / 2));
+                if (areaHeight < areaWidth) {
+                    // 横長画面の場合
+                    // 画像のサイズを取得します。
+                    const size = this.calculation(photo, areaHeight * 2, 0);
+                    // 画像の高さを設定します。
+                    element.height(`${size['photoY']}px`);
+                    // 画像をアニメションするために画像のスタイルを個別に設定します。
+                    this.animationScale(element, (areaWidth / 2) - (size['photoX'] / 2), (areaHeight / 2) - (size['photoY'] / 2));
+                } else {
+                    // 縦長画面の場合
+                    // 画像のサイズを取得します。
+                    const size = this.calculation(photo, 0, areaWidth * 2);
+                    // 画像の幅を設定します。
+                    element.width(`${size['photoX']}px`);
+                    // 画像をアニメションするために画像のスタイルを個別に設定します。
+                    this.animationScale(element, (areaWidth / 2) - (size['photoX'] / 2), (areaHeight / 2) - (size['photoY'] / 2));
+                }
             } else {
                 // 100%でもサイズは合うがあえて数値を設定する。
                 element.width(`${areaWidth}px`);

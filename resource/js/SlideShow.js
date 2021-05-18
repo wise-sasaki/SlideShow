@@ -11620,9 +11620,16 @@ var SlideShowPhotoChange = (function () {
         }
         else {
             if (areaHeight && areaWidth) {
-                var size = this.calculation(photo, areaHeight * 2, 0);
-                element.height(size['photoY'] + "px");
-                this.animationScale(element, (areaWidth / 2) - (size['photoX'] / 2), (areaHeight / 2) - (size['photoY'] / 2));
+                if (areaHeight < areaWidth) {
+                    var size = this.calculation(photo, areaHeight * 2, 0);
+                    element.height(size['photoY'] + "px");
+                    this.animationScale(element, (areaWidth / 2) - (size['photoX'] / 2), (areaHeight / 2) - (size['photoY'] / 2));
+                }
+                else {
+                    var size = this.calculation(photo, 0, areaWidth * 2);
+                    element.width(size['photoX'] + "px");
+                    this.animationScale(element, (areaWidth / 2) - (size['photoX'] / 2), (areaHeight / 2) - (size['photoY'] / 2));
+                }
             }
             else {
                 element.width(areaWidth + "px");
