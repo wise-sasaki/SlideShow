@@ -1,11 +1,11 @@
 import { SlideShowManager } from "./SlideShowManager";
-export declare class SlidshowToggleMenu {
+export declare class SlideShowToggleMenu {
     private slideShowManager;
-    constructor(slideShowManager: SlideShowManager);
+    constructor(manager: SlideShowManager);
     private menuInit;
     private addTogglemenuEventListener;
     destructor(): void;
     private modeAddEvent;
-    private typeAddEvent;
+    private timeAddEvent;
     private orderAddEvent;
 }

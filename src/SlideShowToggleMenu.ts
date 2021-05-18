@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { SlideShowManager } from "./SlideShowManager";
 import { PhotoMode } from "./PhotoMode";
 /**

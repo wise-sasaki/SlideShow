@@ -1,4 +1,3 @@
-import { PhotoData } from "./PhotoData";
 export declare class SlideShowFileReader {
     private slideShowManager;
     private fileElement;
@@ -9,5 +8,4 @@ export declare class SlideShowFileReader {
     private readFiles;
     private fileSort;
     private compareName;
-    getPhotData(): Array<PhotoData>;
 }

@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { PhotoData } from "./PhotoData";
 import { PhotoMode } from "./PhotoMode";
 import { SlideShowToggleMenu } from "./SlideShowToggleMenu";

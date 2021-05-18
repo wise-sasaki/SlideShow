@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { MimeType } from "./MimeType";
 import { PhotoData } from "./PhotoData";
 import { SlideShowManager } from "./SlideShowManager";

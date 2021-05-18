@@ -1,15 +1,15 @@
 export declare class PhotoData {
-    private x_size;
-    private y_size;
-    private file_name;
-    private file_path;
+    private _xSize;
+    private _ySize;
+    private _fileName;
+    private _filePath;
     constructor(file: File, url: any);
-    setXsize(size: number): void;
-    getXsize(): number;
-    setYsize(size: number): void;
-    getYsize(): number;
-    setFilePath(path: string): void;
-    getFIlePath(): string;
-    setFileName(name: string): void;
-    getFileName(): string;
+    set xSize(size: number);
+    get xSize(): number;
+    set ySize(size: number);
+    get ySize(): number;
+    set filePath(path: string);
+    get filePath(): string;
+    set fileName(name: string);
+    get fileName(): string;
 }

@@ -1,4 +1,3 @@
-import $ from "jquery";
 /**
  * 再生ボタン機能クラスです。
  */
