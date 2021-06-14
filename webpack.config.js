@@ -7,7 +7,7 @@ module.exports = {
     // メインとなるJavaScriptファイル（エントリーポイント）
     entry: './src/main.ts',
 
-    // 出力先
+    // 出力先（jsファイルの出力先。*.d.tsは含まない。*.d.tsはtsconfig.jsonのoutDirで指定）
     output: {
       path: path.resolve(__dirname, "resource/js"),
       filename: "SlideShow.js"

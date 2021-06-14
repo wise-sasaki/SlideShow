@@ -213,21 +213,161 @@ var PhotoMode;
 
 /***/ }),
 
-/***/ "./src/SlideShowDomCreate.ts":
-/*!***********************************!*\
-  !*** ./src/SlideShowDomCreate.ts ***!
-  \***********************************/
-/*! exports provided: SlideShowDomCreate */
+/***/ "./src/SlideShowManager.ts":
+/*!*********************************!*\
+  !*** ./src/SlideShowManager.ts ***!
+  \*********************************/
+/*! exports provided: SlideShowManager */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowDomCreate", function() { return SlideShowDomCreate; });
-var SlideShowDomCreate = (function () {
-    function SlideShowDomCreate() {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowManager", function() { return SlideShowManager; });
+/* harmony import */ var _SsToggleMenu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SsToggleMenu */ "./src/SsToggleMenu.ts");
+/* harmony import */ var _SsPhotoChange__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SsPhotoChange */ "./src/SsPhotoChange.ts");
+/* harmony import */ var _SsStatus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SsStatus */ "./src/SsStatus.ts");
+
+
+
+var SlideShowManager = (function () {
+    function SlideShowManager(element, array) {
+        this.toggleMenu = new _SsToggleMenu__WEBPACK_IMPORTED_MODULE_0__["SsToggleMenu"](this);
+        this.change = new _SsPhotoChange__WEBPACK_IMPORTED_MODULE_1__["SsPhotoChange"](element, array);
+        this._addEventListener();
+    }
+    SlideShowManager.prototype._addEventListener = function () {
+        var _this = this;
+        $('#play').on('click', function () {
+            $('div.explanation').hide();
+            _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+        });
+        this.addChangeEventListener();
+        this.addKeybordEventListener();
+        this.addMousewheelEventListener();
+    };
+    SlideShowManager.prototype.addChangeEventListener = function () {
+        var _this = this;
+        $('#left-button').on('click', function () {
+            if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
+                _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
+                _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+            }
+        });
+        $('#right-button').on('click', function () {
+            if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+            }
+        });
+    };
+    SlideShowManager.prototype.addKeybordEventListener = function () {
+        var _this = this;
+        $("#slideshow-wrap").on('keydown', function (e) {
+            if (e.key === 'ArrowLeft') {
+                if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                    _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+                }
+            }
+            else if (e.key === 'ArrowRight') {
+                if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                    _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+                }
+            }
+            else if (e.key === 'ArrowDown') {
+                _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock = _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock ? false : true;
+                if (_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                    var lockDiv = document.createElement('div');
+                    lockDiv.id = "lock";
+                    lockDiv.classList.add('locked');
+                    lockDiv.innerText = "Locked";
+                    $('#file-area').append(lockDiv);
+                }
+                else {
+                    $('#lock').remove();
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                    _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+                }
+            }
+        });
+    };
+    SlideShowManager.prototype.addMousewheelEventListener = function () {
+        var _this = this;
+        $("#slideshow-wrap").on('mousewheel', function (ev) {
+            if (ev.wheelDelta > 0) {
+                if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                    _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+                }
+            }
+            else {
+                if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
+                    _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].reset();
+                    _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+                }
+            }
+        });
+    };
+    SlideShowManager.prototype.destructor = function () {
+        $('#play').off('click');
+        $('#left-button').off('click');
+        $('#right-button').off('click');
+        $("#slideshow-wrap").off('keydown');
+        $("#slideshow-wrap").off('mousewheel');
+        _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].endFlg = true;
+        this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
+        this.toggleMenu.destructor();
+    };
+    SlideShowManager.prototype.changePhoto = function (sec) {
+        var _this = this;
+        if (_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].resetFlg) {
+            clearInterval(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval);
+            _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval = null;
+            _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].resetFlg = false;
+        }
+        else if (_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].endFlg) {
+            clearInterval(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval);
+            _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval = null;
+            _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].endFlg = false;
+            return;
+        }
+        this.change.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].mode, sec);
+        _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval = setInterval(function () {
+            _this.change.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].mode, sec);
+        }, sec * 1000);
+    };
+    SlideShowManager.prototype.changeOrder = function (order) {
+        _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isDefaultOrder = order;
+    };
+    return SlideShowManager;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/SsDomCreate.ts":
+/*!****************************!*\
+  !*** ./src/SsDomCreate.ts ***!
+  \****************************/
+/*! exports provided: SsDomCreate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsDomCreate", function() { return SsDomCreate; });
+var SsDomCreate = (function () {
+    function SsDomCreate() {
         this.createDom();
     }
-    SlideShowDomCreate.prototype.createDom = function () {
+    SsDomCreate.prototype.createDom = function () {
         var element = $("#slideshow-wrap")[0];
         if (!element) {
             var slideshowWrap = $("<div></div>");
@@ -252,16 +392,7 @@ var SlideShowDomCreate = (function () {
             buttonIcon.attr({ class: "ui-icon ui-icon-play" });
             playButton.append(buttonIcon);
             fileAreaItem2.append(playButton);
-            var progress = $("<progress></progress>");
-            progress.attr({ id: "meter", max: "100", value: "0" });
-            fileAreaItem2.append(progress);
             fileArea.append(fileAreaItem2);
-            var fileAreaItem3 = $("<div></div>");
-            fileAreaItem3.attr({ class: "file-area-item" });
-            var meterText = $("<label></label>");
-            meterText.attr({ id: "meter-text", for: "meter" });
-            fileAreaItem3.append(meterText);
-            fileArea.append(fileAreaItem3);
             var hr = $("<hr>");
             hr.attr({ class: "line" });
             fileArea.append(hr);
@@ -310,26 +441,27 @@ var SlideShowDomCreate = (function () {
             $('body').append(slideshowWrap);
         }
     };
-    return SlideShowDomCreate;
+    return SsDomCreate;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/SlideShowFileReader.ts":
-/*!************************************!*\
-  !*** ./src/SlideShowFileReader.ts ***!
-  \************************************/
-/*! exports provided: SlideShowFileReader */
+/***/ "./src/SsFileReader.ts":
+/*!*****************************!*\
+  !*** ./src/SsFileReader.ts ***!
+  \*****************************/
+/*! exports provided: SsFileReader */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowFileReader", function() { return SlideShowFileReader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsFileReader", function() { return SsFileReader; });
 /* harmony import */ var _MimeType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MimeType */ "./src/MimeType.ts");
 /* harmony import */ var _PhotoData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PhotoData */ "./src/PhotoData.ts");
 /* harmony import */ var _SlideShowManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SlideShowManager */ "./src/SlideShowManager.ts");
+/* harmony import */ var _SsProgressBar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SsProgressBar */ "./src/SsProgressBar.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -369,20 +501,22 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var SlideShowFileReader = (function () {
-    function SlideShowFileReader(file, photo) {
+
+var SsFileReader = (function () {
+    function SsFileReader(file, photo) {
         this.slideShowManager = null;
         this.fileElement = file;
         this.photoAreaElement = photo;
         this.photoArray = new Array();
+        this.progressBar = new _SsProgressBar__WEBPACK_IMPORTED_MODULE_3__["SsProgressBar"](photo);
         this._addEventListener();
     }
-    SlideShowFileReader.prototype._addEventListener = function () {
+    SsFileReader.prototype._addEventListener = function () {
         var _this = this;
         $(this.fileElement).on('change', function (ev) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.readFiles(ev)];
+                    case 0: return [4, this._readFiles(ev)];
                     case 1:
                         _a.sent();
                         this.slideShowManager = new _SlideShowManager__WEBPACK_IMPORTED_MODULE_2__["SlideShowManager"](this.photoAreaElement, this.photoArray);
@@ -391,17 +525,15 @@ var SlideShowFileReader = (function () {
             });
         }); });
     };
-    SlideShowFileReader.prototype.readFiles = function (ev) {
+    SsFileReader.prototype._readFiles = function (ev) {
         return __awaiter(this, void 0, void 0, function () {
-            var meter, meterText, fileMax, fileCount, _loop_1, i;
+            var fileMax, fileCount, _loop_1, i;
             var _this = this;
             return __generator(this, function (_a) {
                 if (this.slideShowManager != null) {
                     this.slideShowManager.destructor();
                 }
                 this.photoArray = new Array();
-                meter = $("#meter");
-                meterText = $("#meter-text");
                 fileMax = ev.target.files.length;
                 fileCount = 0;
                 _loop_1 = function (i) {
@@ -415,29 +547,38 @@ var SlideShowFileReader = (function () {
                     fileReader.readAsDataURL(file);
                     fileReader.onload = function () { return __awaiter(_this, void 0, void 0, function () {
                         var url, photo;
+                        var _this = this;
                         return __generator(this, function (_a) {
                             url = fileReader.result;
                             photo = new _PhotoData__WEBPACK_IMPORTED_MODULE_1__["PhotoData"](file, url);
                             this.photoArray.push(photo);
-                            this.fileSort(this.photoArray);
+                            this._fileSort(this.photoArray);
                             fileCount++;
-                            meter.val(fileCount / fileMax * 100);
-                            meterText.text(fileCount + " / " + fileMax + " Complete");
+                            this.progressBar.value(fileCount / fileMax * 100);
+                            this.progressBar.text(fileCount + " / " + fileMax + " Complete");
+                            if (fileMax == fileCount) {
+                                setTimeout(function () {
+                                    _this.progressBar.hide();
+                                }, 500);
+                            }
+                            else {
+                                this.progressBar.show();
+                            }
                             return [2];
                         });
                     }); };
                 };
-                for (i = 0; i < ev.target.files.length; i++) {
+                for (i = 0; i < fileMax; i++) {
                     _loop_1(i);
                 }
                 return [2];
             });
         });
     };
-    SlideShowFileReader.prototype.fileSort = function (array) {
-        array.sort(this.compareName);
+    SsFileReader.prototype._fileSort = function (array) {
+        array.sort(this._compareName);
     };
-    SlideShowFileReader.prototype.compareName = function (a, b) {
+    SsFileReader.prototype._compareName = function (a, b) {
         if (a.fileName > b.fileName) {
             return 1;
         }
@@ -445,178 +586,38 @@ var SlideShowFileReader = (function () {
             return -1;
         }
     };
-    return SlideShowFileReader;
+    return SsFileReader;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/SlideShowManager.ts":
-/*!*********************************!*\
-  !*** ./src/SlideShowManager.ts ***!
-  \*********************************/
-/*! exports provided: SlideShowManager */
+/***/ "./src/SsPhotoChange.ts":
+/*!******************************!*\
+  !*** ./src/SsPhotoChange.ts ***!
+  \******************************/
+/*! exports provided: SsPhotoChange */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowManager", function() { return SlideShowManager; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsPhotoChange", function() { return SsPhotoChange; });
 /* harmony import */ var _PhotoMode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoMode */ "./src/PhotoMode.ts");
-/* harmony import */ var _SlideShowToggleMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SlideShowToggleMenu */ "./src/SlideShowToggleMenu.ts");
-/* harmony import */ var _SlideShowPhotoChange__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SlideShowPhotoChange */ "./src/SlideShowPhotoChange.ts");
+/* harmony import */ var _SsStatus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SsStatus */ "./src/SsStatus.ts");
 
 
-
-var SlideShowManager = (function () {
-    function SlideShowManager(element, array) {
-        this.interval = null;
-        this.resetFlg = false;
-        this.endFlg = false;
-        this.mode = _PhotoMode__WEBPACK_IMPORTED_MODULE_0__["PhotoMode"].NORMAL;
+var SsPhotoChange = (function () {
+    function SsPhotoChange(element, array) {
         this.time = 5;
-        this.toggleMenu = new _SlideShowToggleMenu__WEBPACK_IMPORTED_MODULE_1__["SlideShowToggleMenu"](this);
-        this.change = new _SlideShowPhotoChange__WEBPACK_IMPORTED_MODULE_2__["SlideShowPhotoChange"](element, array);
-        this._addEventListener();
-    }
-    SlideShowManager.prototype._addEventListener = function () {
-        var _this = this;
-        $('#play').on('click', function () {
-            $('div.explanation').hide();
-            _this.changePhoto(_this.time);
-        });
-        this.addChangeEventListener();
-        this.addKeybordEventListener();
-        this.addMousewheelEventListener();
-    };
-    SlideShowManager.prototype.addChangeEventListener = function () {
-        var _this = this;
-        $('#left-button').on('click', function () {
-            if (!_this.change.isLock) {
-                _this.change.subCount();
-                _this.change.subCount();
-                _this.resetFlg = true;
-                _this.changePhoto(_this.time);
-            }
-        });
-        $('#right-button').on('click', function () {
-            if (!_this.change.isLock) {
-                _this.resetFlg = true;
-                _this.changePhoto(_this.time);
-            }
-        });
-    };
-    SlideShowManager.prototype.addKeybordEventListener = function () {
-        var _this = this;
-        $("#slideshow-wrap").on('keydown', function (e) {
-            if (e.key === 'ArrowLeft') {
-                if (!_this.change.isLock) {
-                    _this.change.subCount();
-                    _this.change.subCount();
-                    _this.resetFlg = true;
-                    _this.changePhoto(_this.time);
-                }
-            }
-            else if (e.key === 'ArrowRight') {
-                if (!_this.change.isLock) {
-                    _this.resetFlg = true;
-                    _this.changePhoto(_this.time);
-                }
-            }
-            else if (e.key === 'ArrowDown') {
-                _this.change.isLock = _this.change.isLock ? false : true;
-                if (_this.change.isLock) {
-                    var lockDiv = document.createElement('div');
-                    lockDiv.id = "lock";
-                    lockDiv.classList.add('locked');
-                    lockDiv.innerText = "Locked";
-                    $('#file-area').append(lockDiv);
-                }
-                else {
-                    $('#lock').remove();
-                    _this.resetFlg = true;
-                    _this.changePhoto(_this.time);
-                }
-            }
-        });
-    };
-    SlideShowManager.prototype.addMousewheelEventListener = function () {
-        var _this = this;
-        $("#slideshow-wrap").on('mousewheel', function (ev) {
-            if (ev.wheelDelta > 0) {
-                if (!_this.change.isLock) {
-                    _this.change.subCount();
-                    _this.change.subCount();
-                    _this.resetFlg = true;
-                    _this.changePhoto(_this.time);
-                }
-            }
-            else {
-                if (!_this.change.isLock) {
-                    _this.resetFlg = true;
-                    _this.changePhoto(_this.time);
-                }
-            }
-        });
-    };
-    SlideShowManager.prototype.destructor = function () {
-        $('#play').off('click');
-        $('#left-button').off('click');
-        $('right-button').off('click');
-        $("#slideshow-wrap").off('keydown');
-        $("#slideshow-wrap").off('mousewheel');
-        this.endFlg = true;
-        this.changePhoto(this.time);
-        this.toggleMenu.destructor();
-    };
-    SlideShowManager.prototype.changePhoto = function (sec) {
-        var _this = this;
-        if (this.resetFlg) {
-            clearInterval(this.interval);
-            this.resetFlg = false;
-        }
-        else if (this.endFlg) {
-            clearInterval(this.interval);
-            this.endFlg = false;
-            return;
-        }
-        this.change.changePhoto(this.mode, sec);
-        this.interval = setInterval(function () {
-            _this.change.changePhoto(_this.mode, sec);
-        }, sec * 1000);
-    };
-    return SlideShowManager;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/SlideShowPhotoChange.ts":
-/*!*************************************!*\
-  !*** ./src/SlideShowPhotoChange.ts ***!
-  \*************************************/
-/*! exports provided: SlideShowPhotoChange */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowPhotoChange", function() { return SlideShowPhotoChange; });
-/* harmony import */ var _PhotoMode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoMode */ "./src/PhotoMode.ts");
-
-var SlideShowPhotoChange = (function () {
-    function SlideShowPhotoChange(element, array) {
-        this.time = 5;
-        this._isLock = false;
-        this._isDefaultOrder = true;
         this.photoAreaElemet = element;
         this.photoArray = array;
-        this.photoCount = 0;
+        _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount = 0;
     }
-    SlideShowPhotoChange.prototype.changePhoto = function (mode, time) {
+    SsPhotoChange.prototype.changePhoto = function (mode, time) {
         this.time = time;
         this.countLoop();
-        var photo = this.photoArray[this.photoCount];
+        var photo = this.photoArray[_SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount];
         $(this.photoAreaElemet).empty();
         $("#slideshow-wrap").css({
             'background-image': "url(" + photo.filePath + ")",
@@ -634,45 +635,16 @@ var SlideShowPhotoChange = (function () {
             default:
                 break;
         }
-        if (!this.isLock) {
-            if (!this.isDefaultOrder) {
-                this.setCount(Math.floor(Math.random() * this.photoArray.length));
+        if (!_SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].isLock) {
+            if (!_SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].isDefaultOrder) {
+                _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount = Math.floor(Math.random() * this.photoArray.length);
             }
             else {
-                this.addCount();
+                _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].addCount();
             }
         }
     };
-    SlideShowPhotoChange.prototype.addCount = function () {
-        this.photoCount++;
-    };
-    SlideShowPhotoChange.prototype.subCount = function () {
-        this.photoCount--;
-    };
-    SlideShowPhotoChange.prototype.setCount = function (count) {
-        this.photoCount = count;
-    };
-    Object.defineProperty(SlideShowPhotoChange.prototype, "isLock", {
-        get: function () {
-            return this._isLock;
-        },
-        set: function (lock) {
-            this._isLock = lock;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SlideShowPhotoChange.prototype, "isDefaultOrder", {
-        get: function () {
-            return this._isDefaultOrder;
-        },
-        set: function (order) {
-            this._isDefaultOrder = order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SlideShowPhotoChange.prototype.changeByHeight = function (photo) {
+    SsPhotoChange.prototype.changeByHeight = function (photo) {
         $(this.photoAreaElemet).css({ "text-align": "center" });
         var areaHeight = $(this.photoAreaElemet).height();
         var areaWidth = $(this.photoAreaElemet).width();
@@ -695,7 +667,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-fadein");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.changeByZoomOut = function (photo) {
+    SsPhotoChange.prototype.changeByZoomOut = function (photo) {
         $(this.photoAreaElemet).css({ "position": "relative" });
         var areaHeight = $(this.photoAreaElemet).height();
         var areaWidth = $(this.photoAreaElemet).width();
@@ -734,7 +706,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-fadein");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.changeBySlideIn = function (photo) {
+    SsPhotoChange.prototype.changeBySlideIn = function (photo) {
         $(this.photoAreaElemet).css({ "position": "relative" });
         var areaHeight = $(this.photoAreaElemet).height();
         var areaWidth = $(this.photoAreaElemet).width();
@@ -808,7 +780,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-fadein");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.animationScale = function (element, rangeX, rangeY) {
+    SsPhotoChange.prototype.animationScale = function (element, rangeX, rangeY) {
         element.css({
             "position": "absolute",
             "transform-origin": "center",
@@ -818,7 +790,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-scale");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.animationMoveDown = function (element, range) {
+    SsPhotoChange.prototype.animationMoveDown = function (element, range) {
         element.css({
             "position": "absolute",
             "left": "0px",
@@ -827,7 +799,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-moveDown");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.animationMoveUp = function (element, range) {
+    SsPhotoChange.prototype.animationMoveUp = function (element, range) {
         element.css({
             "position": "absolute",
             "left": "0px",
@@ -836,7 +808,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-moveUp");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.animationMoveLeft = function (element, range) {
+    SsPhotoChange.prototype.animationMoveLeft = function (element, range) {
         element.css({
             "position": "absolute",
             "right": range + "px",
@@ -845,7 +817,7 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-moveLeft");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.animationMoveRight = function (element, range) {
+    SsPhotoChange.prototype.animationMoveRight = function (element, range) {
         element.css({
             "position": "absolute",
             "left": range + "px",
@@ -854,15 +826,15 @@ var SlideShowPhotoChange = (function () {
         element.addClass("animation-moveRight");
         element.css({ "animation-duration": this.time + "s" });
     };
-    SlideShowPhotoChange.prototype.countLoop = function () {
-        if (this.photoCount < 0) {
-            this.photoCount = this.photoArray.length - 1;
+    SsPhotoChange.prototype.countLoop = function () {
+        if (_SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount < 0) {
+            _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount = this.photoArray.length - 1;
         }
-        else if (this.photoArray.length <= this.photoCount) {
-            this.photoCount = 0;
+        else if (this.photoArray.length <= _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount) {
+            _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].photoCount = 0;
         }
     };
-    SlideShowPhotoChange.prototype.calculation = function (photo, height, width) {
+    SsPhotoChange.prototype.calculation = function (photo, height, width) {
         var size = {};
         if (0 < height) {
             size['photoY'] = height;
@@ -879,32 +851,32 @@ var SlideShowPhotoChange = (function () {
         }
         return size;
     };
-    return SlideShowPhotoChange;
+    return SsPhotoChange;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/SlideShowPlayButton.ts":
-/*!************************************!*\
-  !*** ./src/SlideShowPlayButton.ts ***!
-  \************************************/
-/*! exports provided: SlideShowPlayButton */
+/***/ "./src/SsPlayButton.ts":
+/*!*****************************!*\
+  !*** ./src/SsPlayButton.ts ***!
+  \*****************************/
+/*! exports provided: SsPlayButton */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowPlayButton", function() { return SlideShowPlayButton; });
-var SlideShowPlayButton = (function () {
-    function SlideShowPlayButton(element) {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsPlayButton", function() { return SsPlayButton; });
+var SsPlayButton = (function () {
+    function SsPlayButton(element) {
         this.button = element;
         $(this.button).prop('disabled', true);
         $('#left-side').css({ "display": "none" });
         $('#right-side').css({ "display": "none" });
         this._addEventListener();
     }
-    SlideShowPlayButton.prototype._addEventListener = function () {
+    SsPlayButton.prototype._addEventListener = function () {
         var _this = this;
         $('#file').on('change', function (ev) {
             if (ev.target.files.length > 0) {
@@ -919,32 +891,198 @@ var SlideShowPlayButton = (function () {
             $('#right-side').css({ "display": "block" });
         });
     };
-    return SlideShowPlayButton;
+    return SsPlayButton;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/SlideShowToggleMenu.ts":
-/*!************************************!*\
-  !*** ./src/SlideShowToggleMenu.ts ***!
-  \************************************/
-/*! exports provided: SlideShowToggleMenu */
+/***/ "./src/SsProgressBar.ts":
+/*!******************************!*\
+  !*** ./src/SsProgressBar.ts ***!
+  \******************************/
+/*! exports provided: SsProgressBar */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SlideShowToggleMenu", function() { return SlideShowToggleMenu; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsProgressBar", function() { return SsProgressBar; });
+var SsProgressBar = (function () {
+    function SsProgressBar(photo) {
+        this.$photoElement = $(photo);
+        this._meterDomCreate();
+        this.hide();
+    }
+    SsProgressBar.prototype._meterDomCreate = function () {
+        var progressBarArea = $("<div></div>");
+        progressBarArea.attr({ id: "progress-bar-area" });
+        var progress = $("<progress></progress>");
+        progress.attr({ id: "meter", max: "100", value: "0" });
+        progressBarArea.append(progress);
+        var meterText = $("<label></label>");
+        meterText.attr({ id: "meter-text", for: "meter" });
+        progressBarArea.append(meterText);
+        this.$photoElement.append(progressBarArea);
+    };
+    SsProgressBar.prototype.hide = function () {
+        $("#progress-bar-area").hide();
+    };
+    SsProgressBar.prototype.show = function () {
+        $("#progress-bar-area").show();
+    };
+    SsProgressBar.prototype.value = function (value) {
+        $("#meter").val(value);
+    };
+    SsProgressBar.prototype.text = function (text) {
+        $("#meter-text").text(text);
+    };
+    return SsProgressBar;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/SsStatus.ts":
+/*!*************************!*\
+  !*** ./src/SsStatus.ts ***!
+  \*************************/
+/*! exports provided: SsStatus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsStatus", function() { return SsStatus; });
 /* harmony import */ var _PhotoMode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoMode */ "./src/PhotoMode.ts");
 
-var SlideShowToggleMenu = (function () {
-    function SlideShowToggleMenu(manager) {
+var SsStatus = (function () {
+    function SsStatus() {
+    }
+    Object.defineProperty(SsStatus, "interval", {
+        get: function () {
+            return this._interval;
+        },
+        set: function (interval) {
+            this._interval = interval;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    SsStatus.reset = function () {
+        this._resetFlg = true;
+    };
+    Object.defineProperty(SsStatus, "resetFlg", {
+        get: function () {
+            return this._resetFlg;
+        },
+        set: function (resetFlg) {
+            this._resetFlg = resetFlg;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SsStatus, "mode", {
+        get: function () {
+            return this._mode;
+        },
+        set: function (mode) {
+            this._mode = mode;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SsStatus, "endFlg", {
+        get: function () {
+            return this._endFlg;
+        },
+        set: function (endFlg) {
+            this._endFlg = endFlg;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SsStatus, "time", {
+        get: function () {
+            return this._time;
+        },
+        set: function (time) {
+            this._time = time;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    SsStatus.addCount = function () {
+        this._photoCount++;
+    };
+    SsStatus.subCount = function () {
+        this._photoCount--;
+    };
+    Object.defineProperty(SsStatus, "photoCount", {
+        get: function () {
+            return this._photoCount;
+        },
+        set: function (count) {
+            this._photoCount = count;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SsStatus, "isLock", {
+        get: function () {
+            return this._isLock;
+        },
+        set: function (lock) {
+            this._isLock = lock;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SsStatus, "isDefaultOrder", {
+        get: function () {
+            return this._isDefaultOrder;
+        },
+        set: function (order) {
+            this._isDefaultOrder = order;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    SsStatus._interval = null;
+    SsStatus._resetFlg = false;
+    SsStatus._endFlg = false;
+    SsStatus._mode = _PhotoMode__WEBPACK_IMPORTED_MODULE_0__["PhotoMode"].NORMAL;
+    SsStatus._time = 5;
+    SsStatus._isLock = false;
+    SsStatus._isDefaultOrder = true;
+    return SsStatus;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/SsToggleMenu.ts":
+/*!*****************************!*\
+  !*** ./src/SsToggleMenu.ts ***!
+  \*****************************/
+/*! exports provided: SsToggleMenu */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SsToggleMenu", function() { return SsToggleMenu; });
+/* harmony import */ var _PhotoMode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PhotoMode */ "./src/PhotoMode.ts");
+/* harmony import */ var _SsStatus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SsStatus */ "./src/SsStatus.ts");
+
+
+var SsToggleMenu = (function () {
+    function SsToggleMenu(manager) {
         this.slideShowManager = manager;
         this.menuInit();
         this.addTogglemenuEventListener();
     }
-    SlideShowToggleMenu.prototype.menuInit = function () {
+    SsToggleMenu.prototype.menuInit = function () {
         $('#toggle-menu').remove();
         var menuDiv = $('<div></div>');
         menuDiv.attr({
@@ -1095,7 +1233,7 @@ var SlideShowToggleMenu = (function () {
         menuDiv.append(orderDiv);
         $('.setting-area').append(menuDiv);
     };
-    SlideShowToggleMenu.prototype.addTogglemenuEventListener = function () {
+    SsToggleMenu.prototype.addTogglemenuEventListener = function () {
         $('#setting').on('click', function () {
             $('#toggle-menu').slideToggle();
             $('#toggle-menu').toggleClass('active');
@@ -1109,7 +1247,7 @@ var SlideShowToggleMenu = (function () {
         this.orderAddEvent($("#default"), true);
         this.orderAddEvent($("#random"), false);
     };
-    SlideShowToggleMenu.prototype.destructor = function () {
+    SsToggleMenu.prototype.destructor = function () {
         $('#setting').off('click');
         $("#zoomout").off('change');
         $("#slidein").off('change');
@@ -1119,27 +1257,26 @@ var SlideShowToggleMenu = (function () {
         $("#default").off('change');
         $("#random").off('change');
     };
-    SlideShowToggleMenu.prototype.modeAddEvent = function ($elem, mode) {
-        var _this = this;
+    SsToggleMenu.prototype.modeAddEvent = function ($elem, mode) {
         $elem.on('change', function () {
-            _this.slideShowManager.mode = mode;
+            _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].mode = mode;
         });
     };
-    SlideShowToggleMenu.prototype.timeAddEvent = function ($elem, sec) {
+    SsToggleMenu.prototype.timeAddEvent = function ($elem, sec) {
         var _this = this;
         $elem.on('change', function () {
-            _this.slideShowManager.time = sec;
-            _this.slideShowManager.resetFlg = true;
-            _this.slideShowManager.changePhoto(_this.slideShowManager.time);
+            _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].time = sec;
+            _SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].reset();
+            _this.slideShowManager.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_1__["SsStatus"].time);
         });
     };
-    SlideShowToggleMenu.prototype.orderAddEvent = function ($elem, flg) {
+    SsToggleMenu.prototype.orderAddEvent = function ($elem, flg) {
         var _this = this;
         $elem.on('change', function () {
-            _this.slideShowManager.change.isDefaultOrder = flg;
+            _this.slideShowManager.changeOrder(flg);
         });
     };
-    return SlideShowToggleMenu;
+    return SsToggleMenu;
 }());
 
 
@@ -1155,9 +1292,9 @@ var SlideShowToggleMenu = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SlideShowDomCreate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SlideShowDomCreate */ "./src/SlideShowDomCreate.ts");
-/* harmony import */ var _SlideShowFileReader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SlideShowFileReader */ "./src/SlideShowFileReader.ts");
-/* harmony import */ var _SlideShowPlayButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SlideShowPlayButton */ "./src/SlideShowPlayButton.ts");
+/* harmony import */ var _SsDomCreate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SsDomCreate */ "./src/SsDomCreate.ts");
+/* harmony import */ var _SsFileReader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SsFileReader */ "./src/SsFileReader.ts");
+/* harmony import */ var _SsPlayButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SsPlayButton */ "./src/SsPlayButton.ts");
 
 
 
@@ -1166,15 +1303,15 @@ var Main = (function () {
     }
     Main.prototype.main = function () {
         var _this = this;
-        new _SlideShowDomCreate__WEBPACK_IMPORTED_MODULE_0__["SlideShowDomCreate"]();
+        new _SsDomCreate__WEBPACK_IMPORTED_MODULE_0__["SsDomCreate"]();
         var $fileArea = $('#file-area');
         var $photoArea = $('#photo-area');
         this.setDisplaySize($fileArea, $photoArea);
         $(window).on('resize', function () {
             _this.setDisplaySize($fileArea, $photoArea);
         });
-        new _SlideShowFileReader__WEBPACK_IMPORTED_MODULE_1__["SlideShowFileReader"]($('#file')[0], $photoArea[0]);
-        new _SlideShowPlayButton__WEBPACK_IMPORTED_MODULE_2__["SlideShowPlayButton"]($('#play')[0]);
+        new _SsFileReader__WEBPACK_IMPORTED_MODULE_1__["SsFileReader"]($('#file')[0], $photoArea[0]);
+        new _SsPlayButton__WEBPACK_IMPORTED_MODULE_2__["SsPlayButton"]($('#play')[0]);
     };
     Main.prototype.setDisplaySize = function ($fileArea, $photoArea) {
         var windowH = $(window).height();

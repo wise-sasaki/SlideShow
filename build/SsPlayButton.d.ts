@@ -1,4 +1,4 @@
-export declare class SlideShowPlayButton {
+export declare class SsPlayButton {
     private button;
     constructor(element: HTMLElement);
     private _addEventListener;

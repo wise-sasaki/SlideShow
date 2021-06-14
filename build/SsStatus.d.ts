@@ -1,0 +1,30 @@
+import { PhotoMode } from "./PhotoMode";
+export declare class SsStatus {
+    private static _interval;
+    private static _resetFlg;
+    private static _endFlg;
+    private static _mode;
+    private static _time;
+    private static _photoCount;
+    private static _isLock;
+    private static _isDefaultOrder;
+    static set interval(interval: any);
+    static get interval(): any;
+    static reset(): void;
+    static get resetFlg(): boolean;
+    static set resetFlg(resetFlg: boolean);
+    static get mode(): PhotoMode;
+    static set mode(mode: PhotoMode);
+    static get endFlg(): boolean;
+    static set endFlg(endFlg: boolean);
+    static get time(): number;
+    static set time(time: number);
+    static addCount(): void;
+    static subCount(): void;
+    static get photoCount(): number;
+    static set photoCount(count: number);
+    static get isLock(): boolean;
+    static set isLock(lock: boolean);
+    static get isDefaultOrder(): boolean;
+    static set isDefaultOrder(order: boolean);
+}

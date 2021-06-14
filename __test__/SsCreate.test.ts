@@ -1,5 +1,4 @@
-import $ from "jquery";
-import { SlideShowDomCreate } from '../src/SlideShowDomCreate';
+import { SsDomCreate } from '../src/SsDomCreate';
 describe('SlideShowDomCreate', () => {
     // 検証用DOMを作成
     const dom =　'<div id="slideshow-wrap" class="background-image">'
@@ -44,7 +43,7 @@ describe('SlideShowDomCreate', () => {
     + '</div>';
     describe('DOM test', () => {
         test('No1 => スライドショーのDOM構成を検証', () => {
-            new SlideShowDomCreate();
+            new SsDomCreate();
             const html = $('body')[0].innerHTML;
             expect(html).toBe(dom);
         });

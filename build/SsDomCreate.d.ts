@@ -1,4 +1,4 @@
-export declare class SlideShowDomCreate {
+export declare class SsDomCreate {
     constructor();
     private createDom;
 }

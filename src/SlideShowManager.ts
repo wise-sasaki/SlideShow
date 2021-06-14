@@ -1,28 +1,16 @@
 import { PhotoData } from "./PhotoData";
-import { PhotoMode } from "./PhotoMode";
-import { SlideShowToggleMenu } from "./SlideShowToggleMenu";
-import { SlideShowPhotoChange } from "./SlideShowPhotoChange";
+import { SsToggleMenu } from "./SsToggleMenu";
+import { SsPhotoChange } from "./SsPhotoChange";
+import { SsStatus } from "./SsStatus";
 
 /**
  * スライドショー管理クラスです。
  */
 export class SlideShowManager {
     /** トグルメニュークラス */
-    private toggleMenu: SlideShowToggleMenu;
+    private toggleMenu: SsToggleMenu;
     /** 画像表示切り替えクラス */
-    public change: SlideShowPhotoChange;
-
-    /** インターバル処理 */
-    private interval: any = null;
-    /** スライドショーのリセットフラグ */
-    public resetFlg = false;
-    /** スライドショーの終了フラグ */
-    private endFlg = false;
-    /** 画像の表示モードです。 */
-    public mode: PhotoMode = PhotoMode.NORMAL;
-    /** 画像の表示時間です。 */
-    public time: number = 5;
-
+    private change: SsPhotoChange;
 
     /**
      * コンストラクターです。
@@ -31,8 +19,8 @@ export class SlideShowManager {
      */
     constructor(element: HTMLElement, array: Array<PhotoData>) {
         // メンバ変数の初期化をします。
-        this.toggleMenu = new SlideShowToggleMenu(this);
-        this.change = new SlideShowPhotoChange(element, array);
+        this.toggleMenu = new SsToggleMenu(this);
+        this.change = new SsPhotoChange(element, array);
         this._addEventListener();
     }
 
@@ -43,7 +31,7 @@ export class SlideShowManager {
         // 再生ボタン押下時にイベント登録。
         $('#play').on('click', () => {
             $('div.explanation').hide();
-            this.changePhoto(this.time);
+            this.changePhoto(SsStatus.time);
         });
 
         // 切り替えボタン押下時にイベント登録。
@@ -62,18 +50,18 @@ export class SlideShowManager {
     private addChangeEventListener(): void {
         // 表示切り替えボタン左が押されたら画像番号を前の画像に変更します。
         $('#left-button').on('click', () => {
-            if (!this.change.isLock) {
-                this.change.subCount();
-                this.change.subCount();
-                this.resetFlg = true;
-                this.changePhoto(this.time);
+            if (!SsStatus.isLock) {
+                SsStatus.subCount();
+                SsStatus.subCount();
+                SsStatus.reset();
+                this.changePhoto(SsStatus.time);
             }
         });
         // 表示切り替えボタン次が押されたら画像番号を次の画像に変更します。
         $('#right-button').on('click', () => {
-            if (!this.change.isLock) {
-                this.resetFlg = true;
-                this.changePhoto(this.time);
+            if (!SsStatus.isLock) {
+                SsStatus.reset();
+                this.changePhoto(SsStatus.time);
             }
         });
     }
@@ -85,24 +73,24 @@ export class SlideShowManager {
         $("#slideshow-wrap").on('keydown', (e: JQuery.KeyDownEvent) => {
             if (e.key === 'ArrowLeft') {
                 // 押されたキーが←キーの場合
-                if (!this.change.isLock) {
-                    this.change.subCount();
-                    this.change.subCount();
+                if (!SsStatus.isLock) {
+                    SsStatus.subCount();
+                    SsStatus.subCount();
                     // 画像変更
-                    this.resetFlg = true;
-                    this.changePhoto(this.time);
+                    SsStatus.reset();
+                    this.changePhoto(SsStatus.time);
                 }
             } else if (e.key === 'ArrowRight') {
                 // 押されたキーが→キーの場合
-                if (!this.change.isLock) {
+                if (!SsStatus.isLock) {
                     // 画像変更
-                    this.resetFlg = true;
-                    this.changePhoto(this.time);
+                    SsStatus.reset();
+                    this.changePhoto(SsStatus.time);
                 }
             } else if (e.key === 'ArrowDown') {
                 //  押されたキーが↓キーの場合(隠し要素)
-                this.change.isLock = this.change.isLock ? false : true;
-                if (this.change.isLock) {
+                SsStatus.isLock = SsStatus.isLock ? false : true;
+                if (SsStatus.isLock) {
                     // ロック中のアイコンを作成する。
                     const lockDiv = document.createElement('div');
                     lockDiv.id = "lock";
@@ -112,8 +100,8 @@ export class SlideShowManager {
                 } else {
                     $('#lock').remove();
                     // 画像変更
-                    this.resetFlg = true;
-                    this.changePhoto(this.time);
+                    SsStatus.reset();
+                    this.changePhoto(SsStatus.time);
                 }
             }
         });
@@ -126,19 +114,19 @@ export class SlideShowManager {
         $("#slideshow-wrap").on('mousewheel', (ev: any) => {
             if (ev.wheelDelta > 0) {
                 // マウスホイールを上に回した場合
-                if (!this.change.isLock) {
-                    this.change.subCount();
-                    this.change.subCount();
+                if (!SsStatus.isLock) {
+                    SsStatus.subCount();
+                    SsStatus.subCount();
                     // 画像変更
-                    this.resetFlg = true;
-                    this.changePhoto(this.time);
+                    SsStatus.reset();
+                    this.changePhoto(SsStatus.time);
                 }
             } else {
                 // マウスホイールを下に回した場合
-                if (!this.change.isLock) {
+                if (!SsStatus.isLock) {
                     // 画像変更
-                    this.resetFlg = true;
-                    this.changePhoto(this.time);
+                    SsStatus.reset();
+                    this.changePhoto(SsStatus.time);
                 }
             }
         });
@@ -153,14 +141,14 @@ export class SlideShowManager {
         // 画像変更ボタン左のイベントを破棄します。
         $('#left-button').off('click');
         // 画像変更ボタン右のイベントを破棄します。
-        $('right-button').off('click');
+        $('#right-button').off('click');
         // キーボードイベントを破棄します。
         $("#slideshow-wrap").off('keydown');
         // マウスホイールイベントを破棄します。
         $("#slideshow-wrap").off('mousewheel');
         // スライドショーを停止します。
-        this.endFlg = true;
-        this.changePhoto(this.time);
+        SsStatus.endFlg = true;
+        this.changePhoto(SsStatus.time);
         // トグルメニューのイベントを破棄します。
         this.toggleMenu.destructor();
     }
@@ -170,21 +158,31 @@ export class SlideShowManager {
      * @param sec 待機秒数
      */
     public changePhoto(sec: number): void {
-        if (this.resetFlg) {
+        if (SsStatus.resetFlg) {
             // スライドショーのリセットフラグがtrueの場合、タイマーをリセットします。
-            clearInterval(this.interval);
-            this.resetFlg = false;
-        } else if (this.endFlg) {
+            clearInterval(SsStatus.interval);
+            SsStatus.interval = null;
+            SsStatus.resetFlg = false;
+        } else if (SsStatus.endFlg) {
             // スライドショーの終了フラグがtrueの場合、タイマーをリセットしてスライドショーを終了します。
-            clearInterval(this.interval);
-            this.endFlg = false;
+            clearInterval(SsStatus.interval);
+            SsStatus.interval = null;
+            SsStatus.endFlg = false;
             return;
         }
         // 初回の画像表示処理を呼び出します。
-        this.change.changePhoto(this.mode, sec);
+        this.change.changePhoto(SsStatus.mode, sec);
         // 引数sec秒ごとに処理を実行します。
-        this.interval = setInterval(() => {
-            this.change.changePhoto(this.mode, sec);
+        SsStatus.interval = setInterval(() => {
+            this.change.changePhoto(SsStatus.mode, sec);
         }, sec * 1000);
+    }
+
+    /**
+     * 画像の表示順序を変更する。
+     * @param order 
+     */
+    public changeOrder(order: boolean) {
+        SsStatus.isDefaultOrder = order;
     }
 }

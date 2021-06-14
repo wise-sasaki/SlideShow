@@ -1,6 +1,5 @@
-import $ from "jquery";
 import * as fs from 'fs';
-import { SlideShowFileReader } from '../src/SlideShowFileReader';
+import { SsFileReader } from '../src/SsFileReader';
 import { PhotoData } from '../src/PhotoData';
 const FileMock = jest.fn();
 describe('SlideShowFileReader', () => {
@@ -16,7 +15,7 @@ describe('SlideShowFileReader', () => {
     });
     describe('public method test', () => {
         test('No1 => コンストラクタの検証', () => {
-            slideShowFileReader = new SlideShowFileReader($('#file')[0],$('#photo-area')[0]);
+            slideShowFileReader = new SsFileReader($('#file')[0],$('#photo-area')[0]);
         });
     });
     describe('event test', () => {
@@ -27,7 +26,7 @@ describe('SlideShowFileReader', () => {
     });
     describe('private method test', () => {
         test('No1 => readFilesの検証', () => {
-            slideShowFileReader = new SlideShowFileReader($('#file')[0],$('#photo-area')[0]);
+            slideShowFileReader = new SsFileReader($('#file')[0],$('#photo-area')[0]);
             const file1 = new Blob([getUploadedImageBuffer('D:/workspace/SlideShow/__test__/image/01.jpg')], { type: "image/jpeg" });
             const event = $.Event('change', {
                 files: [file1]
@@ -70,7 +69,7 @@ describe('SlideShowFileReader', () => {
             affterArray.push(new PhotoData(file4, url));
             affterArray.push(new PhotoData(file5, url));
             // 対象クラスの呼び出し
-            slideShowFileReader = new SlideShowFileReader($('#file')[0],$('#photo-area')[0]);
+            slideShowFileReader = new SsFileReader($('#file')[0],$('#photo-area')[0]);
             (slideShowFileReader as any).fileSort(beforeArray);
             // 検証
             for(let i = 0; i < beforeArray.length; i++){

@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { PhotoMode } from '../src/PhotoMode';
 import { SlideShowToggleMenu } from '../src/SlideShowToggleMenu';
 const SlideShowManagerMock = jest.fn();
@@ -48,11 +47,14 @@ describe('SlideShowToggleMenu', () => {
         // SlideShowManagerクラスをモック化
         SlideShowManagerMock.mockImplementationOnce(() => {
             return {
-                mode: PhotoMode.NORMAL,
+                _mode: PhotoMode.NORMAL,
+                changeMode: function(mode:PhotoMode) {this._mode = mode},
                 time: 5,
                 resetFlg: false,
-                isDefaultOrder: true,
-                changePhoto: () => { }
+                reset: function() {this.resetFlg = true},
+                changePhoto: () => { },
+                isDefaultOrder: false,
+                changeOrder: function(flg: boolean) {this.isDefaultOrder = flg},
             };
         });
 
@@ -83,117 +85,147 @@ describe('SlideShowToggleMenu', () => {
             // expect(html).toBe(toggleMenuOpenDom + dom);
         });
         test('No2-1 => 通常ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
-            // 一回ラジオボタンを切り替える
-            $("#zoomout").trigger('click');
+            $("#zoomout").trigger('click');// 一回ラジオボタンを切り替える
             $("#normal").trigger('click');
-            expect(slideShowManagerMock.mode).toBe(PhotoMode.NORMAL);
+            // 検証
+            expect(slideShowManagerMock._mode).toBe(PhotoMode.NORMAL);
         });
         test('No2-2 => 通常のラベルクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
-            // 一回ラジオボタンを切り替える
-            $("#zoomout").trigger('click');
+            $("#zoomout").trigger('click');// 一回ラジオボタンを切り替える
             $("#normal-mode label").trigger('click');
-            expect(slideShowManagerMock.mode).toBe(PhotoMode.NORMAL);
+            // 検証
+            expect(slideShowManagerMock._mode).toBe(PhotoMode.NORMAL);
         });
         test('No3-1 => ズームアウトラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#zoomout").trigger('click');
-            expect(slideShowManagerMock.mode).toBe(PhotoMode.ZOOMOUT);
+            // 検証
+            expect(slideShowManagerMock._mode).toBe(PhotoMode.ZOOMOUT);
         });
         test('No3-2 => ズームアウトのラベルクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#zoomout-mode label").trigger('click');
-            expect(slideShowManagerMock.mode).toBe(PhotoMode.ZOOMOUT);
+            // 検証
+            expect(slideShowManagerMock._mode).toBe(PhotoMode.ZOOMOUT);
         });
         test('No4-1 => スライドインラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#slidein").trigger('click');
-            expect(slideShowManagerMock.mode).toBe(PhotoMode.SLIDEIN);
+            // 検証
+            expect(slideShowManagerMock._mode).toBe(PhotoMode.SLIDEIN);
         });
         test('No4-2 => スライドインラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#slidein-mode label").trigger('click');
-            expect(slideShowManagerMock.mode).toBe(PhotoMode.SLIDEIN);
+            // 検証
+            expect(slideShowManagerMock._mode).toBe(PhotoMode.SLIDEIN);
         });
         test('No5-1 => 3秒ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#sec3").trigger('click');
+            // 検証
             expect(slideShowManagerMock.time).toBe(3);
             expect(slideShowManagerMock.resetFlg).toBe(true);
         });
         test('No5-2 => 3秒のラベルクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#sec3-time label").trigger('click');
+            // 検証
             expect(slideShowManagerMock.time).toBe(3);
             expect(slideShowManagerMock.resetFlg).toBe(true);
         });
         test('No6-1 => 5秒ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             // 一回3秒に切り替える
             $("#sec3").trigger('click');
             $("#sec5").trigger('click');
+            // 検証
             expect(slideShowManagerMock.time).toBe(5);
             expect(slideShowManagerMock.resetFlg).toBe(true);
         });
         test('No6-2 => 5秒のラベルクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             // 一回3秒に切り替える
             $("#sec3").trigger('click');
             $("#sec5-time label").trigger('click');
+            // 検証
             expect(slideShowManagerMock.time).toBe(5);
             expect(slideShowManagerMock.resetFlg).toBe(true);
         });
         test('No7-1 => 10秒ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#sec10").trigger('click');
+            // 検証
             expect(slideShowManagerMock.time).toBe(10);
             expect(slideShowManagerMock.resetFlg).toBe(true);
         });
         test('No7-2 => 10秒ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#sec10-time label").trigger('click');
+            // 検証
             expect(slideShowManagerMock.time).toBe(10);
             expect(slideShowManagerMock.resetFlg).toBe(true);
         });
         test('No8-1 => 名前表示順ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             // 一回ランダム表示順に切り替える
             $("#random").trigger('click');
             $("#default").trigger('click');
+            // 検証
             expect(slideShowManagerMock.isDefaultOrder).toBe(true);
         });
         test('No8-2 => 名前表示順ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             // 一回ランダム表示順に切り替える
             $("#random").trigger('click');
             $("#default-order label").trigger('click');
+            // 検証
             expect(slideShowManagerMock.isDefaultOrder).toBe(true);
         });
         test('No9-1 => ランダム表示順ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#random").trigger('click');
+            // 検証
             expect(slideShowManagerMock.isDefaultOrder).toBe(false);
         });
         test('No9-2 => ランダム表示順ラジオボタンクリック時の検証', () => {
+            // 準備
             const slideShowManagerMock = new SlideShowManagerMock();
             slideShowToggleMenu = new SlideShowToggleMenu(slideShowManagerMock);
             $("#random-order label").trigger('click');
+            // 検証
             expect(slideShowManagerMock.isDefaultOrder).toBe(false);
         });
     });

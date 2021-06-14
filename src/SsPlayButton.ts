@@ -1,7 +1,7 @@
 /**
  * 再生ボタン機能クラスです。
  */
-export class SlideShowPlayButton {
+export class SsPlayButton {
     /** 再生機能を設定するボタンの要素 */
     private button: HTMLElement;
 

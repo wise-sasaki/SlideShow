@@ -1,11 +1,12 @@
-export declare class SlideShowFileReader {
+export declare class SsFileReader {
     private slideShowManager;
     private fileElement;
     private photoAreaElement;
     private photoArray;
+    private progressBar;
     constructor(file: HTMLElement, photo: HTMLElement);
     private _addEventListener;
-    private readFiles;
-    private fileSort;
-    private compareName;
+    private _readFiles;
+    private _fileSort;
+    private _compareName;
 }

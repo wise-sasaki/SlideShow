@@ -1,5 +1,5 @@
 import $ from "jquery";
-import { SlideShowPlayButton } from '../src/SlideShowPlayButton';
+import { SsPlayButton } from '../src/SsPlayButton';
 describe('SlideShowPlayButton', () => {
     let slideShowPlayButton = null;
     beforeEach(() => {
@@ -14,7 +14,7 @@ describe('SlideShowPlayButton', () => {
     });
     describe('constructor test', () => {
         test('No1 => コンストラクタの検証', () => {
-            slideShowPlayButton = new SlideShowPlayButton($('#play')[0]);
+            slideShowPlayButton = new SsPlayButton($('#play')[0]);
             expect($('#play').prop('disabled')).toBe(true);
             expect($('#left-side').css('display')).toBe('none');
             expect($('#right-side').css('display')).toBe('none');
@@ -22,12 +22,12 @@ describe('SlideShowPlayButton', () => {
     });
     describe('event test', () => {
         test('No1 => ファイルダイアログのchangeイベントの検証', () => {
-            slideShowPlayButton = new SlideShowPlayButton($('#play')[0]);
+            slideShowPlayButton = new SsPlayButton($('#play')[0]);
             console.log('type="file"の値を設定することはセキュリティ上できません。よってこのテストは実施不可');
             console.log('https://stackoverflow.com/questions/1696877/how-to-set-a-value-to-a-file-input-in-html/1696884#1696884');
         });
         test('No2 => 再生ボタンのclickイベントの検証', () => {
-            slideShowPlayButton = new SlideShowPlayButton($('#play')[0]);
+            slideShowPlayButton = new SsPlayButton($('#play')[0]);
             // 一度再生ボタンを活性化する。
             $('#play').prop('disabled', false);
             $('#play').trigger('click');

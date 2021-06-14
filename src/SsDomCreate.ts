@@ -1,7 +1,7 @@
 /**
  * トグルメニュー作成クラスです。
  */
-export class SlideShowDomCreate {
+export class SsDomCreate {
 
     /**
      * コンストラクターです。
@@ -43,17 +43,7 @@ export class SlideShowDomCreate {
             buttonIcon.attr({ class: "ui-icon ui-icon-play" });
             playButton.append(buttonIcon);
             fileAreaItem2.append(playButton);
-            const progress = $("<progress></progress>");
-            progress.attr({ id: "meter", max: "100", value: "0" });
-            fileAreaItem2.append(progress);
             fileArea.append(fileAreaItem2);
-            // プログレスバー用メッセージ
-            const fileAreaItem3 = $("<div></div>");
-            fileAreaItem3.attr({ class: "file-area-item" });
-            const meterText = $("<label></label>");
-            meterText.attr({ id: "meter-text", for: "meter" });
-            fileAreaItem3.append(meterText);
-            fileArea.append(fileAreaItem3);
             // 間仕切り用
             const hr = $("<hr>");
             hr.attr({ class: "line" });

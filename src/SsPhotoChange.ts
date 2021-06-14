@@ -1,21 +1,16 @@
 import { PhotoData } from "./PhotoData";
 import { PhotoMode } from "./PhotoMode";
+import { SsStatus } from "./SsStatus";
 /**
  * 画像切り替えクラスです。
  */
-export class SlideShowPhotoChange {
+export class SsPhotoChange {
     /** 画像表示エリアの要素 */
     private photoAreaElemet: HTMLElement;
     /** 画像データの配列 */
     private photoArray: Array<PhotoData>;
     /** 画像の表示時間です。 */
     private time: number = 5;
-    /** 現在の画像番号 */
-    private photoCount: number;
-    /** ロックフラグ */
-    private _isLock: boolean = false;
-    /** 順序フラグ */
-    private _isDefaultOrder: boolean = true;
 
     /**
      * コンストラクターです。
@@ -23,7 +18,7 @@ export class SlideShowPhotoChange {
     constructor(element: HTMLElement, array: Array<PhotoData>) {
         this.photoAreaElemet = element;
         this.photoArray = array;
-        this.photoCount = 0;
+        SsStatus.photoCount = 0;
     }
 
     /**
@@ -35,7 +30,7 @@ export class SlideShowPhotoChange {
         // 画像番号の管理
         this.countLoop();
         // 現在の画像番号を基に配列から画像オブジェクトを取り出します。
-        const photo = this.photoArray[this.photoCount];
+        const photo = this.photoArray[SsStatus.photoCount];
         // 画像表示エリアを一旦空にします。
         $(this.photoAreaElemet).empty();
         // 画像を背景部に設定します。
@@ -57,50 +52,15 @@ export class SlideShowPhotoChange {
                 // 何も処理しない
                 break;
         }
-        if (!this.isLock) {
-            if (!this.isDefaultOrder) {
+        if (!SsStatus.isLock) {
+            if (!SsStatus.isDefaultOrder) {
                 // ランダム順ならランダムな値を返します。
-                this.setCount(Math.floor(Math.random() * this.photoArray.length));
+                SsStatus.photoCount = Math.floor(Math.random() * this.photoArray.length);
             } else {
                 // 画像番号を加算します。
-                this.addCount();
+                SsStatus.addCount();
             }
         }
-    }
-
-    /** 画像番号加算 */
-    public addCount(): void {
-        this.photoCount++;
-    }
-
-    /** 画像番号減算 */
-    public subCount(): void {
-        this.photoCount--;
-    }
-
-    /** 画像番号設定 */
-    public setCount(count: number): void {
-        this.photoCount = count;
-    }
-
-    /** ロックフラグ getter */
-    get isLock() {
-        return this._isLock;
-    }
-
-    /** ロックフラグ setter */
-    set isLock(lock: boolean) {
-        this._isLock = lock;
-    }
-
-    /** 順序フラグ getter */
-    get isDefaultOrder() {
-        return this._isDefaultOrder;
-    }
-
-    /** 順序フラグ setter */
-    set isDefaultOrder(order: boolean) {
-        this._isDefaultOrder = order;
     }
 
     /**
@@ -418,12 +378,12 @@ export class SlideShowPhotoChange {
      * 画像番号を管理します。
      */
     private countLoop(): void {
-        if (this.photoCount < 0) {
+        if (SsStatus.photoCount < 0) {
             // 0より小さい場合、最後尾に移動します。
-            this.photoCount = this.photoArray.length - 1;
-        } else if (this.photoArray.length <= this.photoCount) {
+            SsStatus.photoCount = this.photoArray.length - 1;
+        } else if (this.photoArray.length <= SsStatus.photoCount) {
             // 範囲外ならカウントをリセットします。
-            this.photoCount = 0;
+            SsStatus.photoCount = 0;
         }
     }
 

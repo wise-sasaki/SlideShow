@@ -1,9 +1,11 @@
 import { SlideShowManager } from "./SlideShowManager";
 import { PhotoMode } from "./PhotoMode";
+import { SsStatus } from "./SsStatus";
+
 /**
  * トグルメニュー作成クラスです。
  */
-export class SlideShowToggleMenu {
+export class SsToggleMenu {
     /** スライドショー管理クラス */
     private slideShowManager: SlideShowManager;
 
@@ -249,7 +251,7 @@ export class SlideShowToggleMenu {
     private modeAddEvent($elem: JQuery, mode: PhotoMode): void {
         // 自分自身の要素にchangeイベントを登録します。
         $elem.on('change', () => {
-            this.slideShowManager.mode = mode;
+            SsStatus.mode = mode;
         });
     }
 
@@ -261,9 +263,9 @@ export class SlideShowToggleMenu {
     private timeAddEvent($elem: JQuery, sec: number): void {
         // 自分自身の要素にchangeイベントを登録します。
         $elem.on('change', () => {
-            this.slideShowManager.time = sec;
-            this.slideShowManager.resetFlg = true;
-            this.slideShowManager.changePhoto(this.slideShowManager.time);
+            SsStatus.time = sec;
+            SsStatus.reset();
+            this.slideShowManager.changePhoto(SsStatus.time);
         });
     }
 
@@ -275,7 +277,7 @@ export class SlideShowToggleMenu {
     private orderAddEvent($elem: JQuery, flg: boolean): void {
         // 自分自身の要素にchangeイベントを登録します。
         $elem.on('change', () => {
-            this.slideShowManager.change.isDefaultOrder = flg;
+            this.slideShowManager.changeOrder(flg);
         });
     }
 }
