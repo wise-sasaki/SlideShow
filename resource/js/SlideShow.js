@@ -299,7 +299,7 @@ var SlideShowManager = (function () {
     SlideShowManager.prototype.addMousewheelEventListener = function () {
         var _this = this;
         $("#slideshow-wrap").on('mousewheel', function (ev) {
-            if (ev.wheelDelta > 0) {
+            if (ev.originalEvent.wheelDelta > 0) {
                 if (!_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].isLock) {
                     _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();
                     _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].subCount();

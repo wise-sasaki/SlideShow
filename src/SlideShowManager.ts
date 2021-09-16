@@ -112,7 +112,7 @@ export class SlideShowManager {
      */
     private addMousewheelEventListener(): void {
         $("#slideshow-wrap").on('mousewheel', (ev: any) => {
-            if (ev.wheelDelta > 0) {
+            if (ev.originalEvent.wheelDelta > 0) {
                 // マウスホイールを上に回した場合
                 if (!SsStatus.isLock) {
                     SsStatus.subCount();
