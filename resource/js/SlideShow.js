@@ -238,7 +238,6 @@ var SlideShowManager = (function () {
     SlideShowManager.prototype._addEventListener = function () {
         var _this = this;
         $('#play').on('click', function () {
-            $('div.explanation').hide();
             _this.changePhoto(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].time);
         });
         this.addChangeEventListener();
@@ -327,6 +326,7 @@ var SlideShowManager = (function () {
     };
     SlideShowManager.prototype.changePhoto = function (sec) {
         var _this = this;
+        $('div.explanation').hide();
         if (_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].resetFlg) {
             clearInterval(_SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval);
             _SsStatus__WEBPACK_IMPORTED_MODULE_2__["SsStatus"].interval = null;

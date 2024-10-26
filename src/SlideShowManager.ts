@@ -30,7 +30,6 @@ export class SlideShowManager {
     private _addEventListener(): void {
         // 再生ボタン押下時にイベント登録。
         $('#play').on('click', () => {
-            $('div.explanation').hide();
             this.changePhoto(SsStatus.time);
         });
 
@@ -158,6 +157,7 @@ export class SlideShowManager {
      * @param sec 待機秒数
      */
     public changePhoto(sec: number): void {
+        $('div.explanation').hide(); // 説明表示を非表示にする
         if (SsStatus.resetFlg) {
             // スライドショーのリセットフラグがtrueの場合、タイマーをリセットします。
             clearInterval(SsStatus.interval);
